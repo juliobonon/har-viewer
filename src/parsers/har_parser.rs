@@ -1,8 +1,10 @@
 pub mod har_parser {
+    #[derive(PartialEq, Clone, Debug)]
     pub struct Request {
         pub url: String,
         pub method: String,
         pub status: String,
+        pub content: String,
         pub headers: Vec<String>,
     }
 
@@ -22,7 +24,8 @@ pub mod har_parser {
             let status_text = &response["statusText"];
             let content_type = &response["content"]["mimeType"];
             let size = &response["content"]["size"];
-            let headers = &response["headers"];
+            let content_text = &response["content"]["text"];
+            let headers = &request_info["headers"];
             let post_data = &request_info["postData"];
             let mut content_length = 0;
 
@@ -55,6 +58,7 @@ pub mod har_parser {
                 method: method.to_string(),
                 status: status.to_string(),
                 headers: headers_str_vec,
+                content: content_text.to_string(),
             };
             entries_to_return.push_front(request_struct)
         }
